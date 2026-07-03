@@ -45,16 +45,29 @@ const App: React.FC = () => {
         fontFamily: 'system-ui, -apple-system, sans-serif',
       }}>
         <div style={{
-          fontSize: 24, color: '#1f91df',
-          marginBottom: 12, fontWeight: 400,
+          fontSize: 42, color: '#1f91df',
+          marginBottom: 20, fontWeight: 400,
         }}>
           현재 데모 상태입니다.
         </div>
         <div style={{
-          fontSize: 16, color: '#0e1e52',
-          fontWeight: 400,
+          fontSize: 28, color: '#0e1e52',
+          marginBottom: 36, fontWeight: 400,
         }}>
           방문해주셔서 감사합니다.
+        </div>
+        <div style={{
+          width: 240, height: 6,
+          background: '#e0e0e0',
+          borderRadius: 9999,
+          overflow: 'hidden',
+        }}>
+          <div style={{
+            height: '100%',
+            background: '#0e1e52',
+            borderRadius: 9999,
+            animation: 'splashProgress 3s linear forwards',
+          }} />
         </div>
       </div>
     );
