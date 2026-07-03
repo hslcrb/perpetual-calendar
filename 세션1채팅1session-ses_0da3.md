@@ -2,207 +2,7 @@
 
 **Session ID:** ses_0da325e77ffetErts70QV0Pdvw
 **Created:** 7/3/2026, 11:27:41 AM
-**Updated:** 7/3/2026, 12:14:59 PM
-
----
-
-## Assistant (Build · DeepSeek V4 Flash Free · 4.7s)
-
-_Thinking:_
-
-Also need to update the year label text in the WM_PAINT or in response to quarter changes. Let me add a function to update the year label:
-
-**Tool: edit**
-
-**Input:**
-```json
-{
-  "filePath": "/home/rheehoselenovo2/property/perpetual-calendar/main_win.cpp",
-  "oldString": "void RefreshCalendar() {\n    if (g_hwnd) { InvalidateRect(g_hwnd, NULL, TRUE); UpdateWindow(g_hwnd); }\n}",
-  "newString": "void RefreshCalendar() {\n    if (g_hwnd) {\n        // Update year label\n        int year = g_app.get_year();\n        int start = g_app.get_start_month();\n        char ys[64];\n        snprintf(ys, sizeof(ys), \"%d\\xEB\\x85\\x84 (%s)\", year,\n                 start == 1 ? \"\\xEC\\x83\\x81\\xEB\\xB0\\x98\\xEA\\xB8\\xB0\" : \"\\xED\\x95\\x98\\xEB\\xB0\\x98\\xEA\\xB8\\xB0\");\n        std::wstring wys = u2w(ys);\n        SetWindowTextW(g_hwndYearLabel, wys.c_str());\n        InvalidateRect(g_hwnd, NULL, TRUE);\n        UpdateWindow(g_hwnd);\n    }\n}"
-}
-```
-
-**Output:**
-```
-Edit applied successfully.
-```
-
----
-
-## Assistant (Build · DeepSeek V4 Flash Free · 7.9s)
-
-_Thinking:_
-
-Now let's try cross-compiling again:
-
-**Tool: bash**
-
-**Input:**
-```json
-{
-  "command": "cd /home/rheehoselenovo2/property/perpetual-calendar && make clean && make win 2>&1",
-  "description": "Cross-compile Windows binary attempt 2",
-  "timeout": 60000
-}
-```
-
-**Output:**
-```
-rm -f *.o perpetual-calendar perpetual-calendar.exe
-x86_64-w64-mingw32-g++ -std=c++11 -O2 -Wall -Wextra -static -DWIN32_LEAN_AND_MEAN -c calendar_core.cpp -o calendar_core_win.o
-x86_64-w64-mingw32-g++ -std=c++11 -O2 -Wall -Wextra -static -DWIN32_LEAN_AND_MEAN -c main_win.cpp -o main_win.o
-main_win.cpp:3: warning: "WIN32_LEAN_AND_MEAN" redefined
-    3 | #define WIN32_LEAN_AND_MEAN
-      | 
-<command-line>: note: this is the location of the previous definition
-main_win.cpp: In function ‘void InitGDI()’:
-main_win.cpp:76:21: warning: missing initializer for member ‘tagLOGFONTW::lfWidth’ [-Wmissing-field-initializers]
-   76 |     LOGFONTW lf = {0};
-      |                     ^
-main_win.cpp:76:21: warning: missing initializer for member ‘tagLOGFONTW::lfEscapement’ [-Wmissing-field-initializers]
-main_win.cpp:76:21: warning: missing initializer for member ‘tagLOGFONTW::lfOrientation’ [-Wmissing-field-initializers]
-main_win.cpp:76:21: warning: missing initializer for member ‘tagLOGFONTW::lfWeight’ [-Wmissing-field-initializers]
-main_win.cpp:76:21: warning: missing initializer for member ‘tagLOGFONTW::lfItalic’ [-Wmissing-field-initializers]
-main_win.cpp:76:21: warning: missing initializer for member ‘tagLOGFONTW::lfUnderline’ [-Wmissing-field-initializers]
-main_win.cpp:76:21: warning: missing initializer for member ‘tagLOGFONTW::lfStrikeOut’ [-Wmissing-field-initializers]
-main_win.cpp:76:21: warning: missing initializer for member ‘tagLOGFONTW::lfCharSet’ [-Wmissing-field-initializers]
-main_win.cpp:76:21: warning: missing initializer for member ‘tagLOGFONTW::lfOutPrecision’ [-Wmissing-field-initializers]
-main_win.cpp:76:21: warning: missing initializer for member ‘tagLOGFONTW::lfClipPrecision’ [-Wmissing-field-initializers]
-main_win.cpp:76:21: warning: missing initializer for member ‘tagLOGFONTW::lfQuality’ [-Wmissing-field-initializers]
-main_win.cpp:76:21: warning: missing initializer for member ‘tagLOGFONTW::lfPitchAndFamily’ [-Wmissing-field-initializers]
-main_win.cpp:76:21: warning: missing initializer for member ‘tagLOGFONTW::lfFaceName’ [-Wmissing-field-initializers]
-In file included from /usr/share/mingw-w64/include/windows.h:72,
-                 from main_win.cpp:5:
-main_win.cpp: In function ‘int WinMain(HINSTANCE, HINSTANCE, LPSTR, int)’:
-main_win.cpp:390:32: error: cannot convert ‘LPSTR’ {aka ‘char*’} to ‘LPCWSTR’ {aka ‘const wchar_t*’}
-  390 |     wc.hIcon = LoadIconW(NULL, IDI_APPLICATION);
-      |                                ^~~~~~~~~~~~~~~
-      |                                |
-      |                                LPSTR {aka char*}
-/usr/share/mingw-w64/include/winuser.h:4159:65: note:   initializing argument 2 of ‘HICON__* LoadIconW(HINSTANCE, LPCWSTR)’
- 4159 |   WINUSERAPI HICON WINAPI LoadIconW(HINSTANCE hInstance,LPCWSTR lpIconName);
-      |                                                         ~~~~~~~~^~~~~~~~~~
-main_win.cpp:391:36: error: cannot convert ‘LPSTR’ {aka ‘char*’} to ‘LPCWSTR’ {aka ‘const wchar_t*’}
-  391 |     wc.hCursor = LoadCursorW(NULL, IDC_ARROW);
-      |                                    ^~~~~~~~~
-      |                                    |
-      |                                    LPSTR {aka char*}
-/usr/share/mingw-w64/include/winuser.h:4114:69: note:   initializing argument 2 of ‘HICON__* LoadCursorW(HINSTANCE, LPCWSTR)’
- 4114 |   WINUSERAPI HCURSOR WINAPI LoadCursorW(HINSTANCE hInstance,LPCWSTR lpCursorName);
-      |                                                             ~~~~~~~~^~~~~~~~~~~~
-main_win.cpp:402:36: error: cannot convert ‘LPSTR’ {aka ‘char*’} to ‘LPCWSTR’ {aka ‘const wchar_t*’}
-  402 |     ec.hCursor = LoadCursorW(NULL, IDC_ARROW);
-      |                                    ^~~~~~~~~
-      |                                    |
-      |                                    LPSTR {aka char*}
-/usr/share/mingw-w64/include/winuser.h:4114:69: note:   initializing argument 2 of ‘HICON__* LoadCursorW(HINSTANCE, LPCWSTR)’
- 4114 |   WINUSERAPI HCURSOR WINAPI LoadCursorW(HINSTANCE hInstance,LPCWSTR lpCursorName);
-      |                                                             ~~~~~~~~^~~~~~~~~~~~
-make: *** [Makefile:27: main_win.o] 오류 1
-
-```
-
----
-
-## Assistant (Build · DeepSeek V4 Flash Free · 4.4s)
-
-_Thinking:_
-
-The issues are:
-1. `IDI_APPLICATION` and `IDC_ARROW` are `MAKEINTRESOURCE` which are `LPSTR` but the `W` functions need `LPCWSTR`. I need to use `MAKEINTRESOURCEW` or cast to `LPCWSTR`.
-2. The LOGFONTW initialization warnings are minor.
-
-Let me fix the LoadIconW/LoadCursorW calls:
-
-**Tool: edit**
-
-**Input:**
-```json
-{
-  "filePath": "/home/rheehoselenovo2/property/perpetual-calendar/main_win.cpp",
-  "oldString": "    wc.hIcon = LoadIconW(NULL, IDI_APPLICATION);\n    wc.hCursor = LoadCursorW(NULL, IDC_ARROW);",
-  "newString": "    wc.hIcon = LoadIconW(NULL, (LPCWSTR)IDI_APPLICATION);\n    wc.hCursor = LoadCursorW(NULL, (LPCWSTR)IDC_ARROW);"
-}
-```
-
-**Output:**
-```
-Edit applied successfully.
-```
-
----
-
-## Assistant (Build · DeepSeek V4 Flash Free · 3.4s)
-
-**Tool: edit**
-
-**Input:**
-```json
-{
-  "filePath": "/home/rheehoselenovo2/property/perpetual-calendar/main_win.cpp",
-  "oldString": "    ec.hCursor = LoadCursorW(NULL, IDC_ARROW);",
-  "newString": "    ec.hCursor = LoadCursorW(NULL, (LPCWSTR)IDC_ARROW);"
-}
-```
-
-**Output:**
-```
-Edit applied successfully.
-```
-
----
-
-## Assistant (Build · DeepSeek V4 Flash Free · 6.7s)
-
-_Thinking:_
-
-Also fix the LOGFONTW initialization:
-
-**Tool: edit**
-
-**Input:**
-```json
-{
-  "filePath": "/home/rheehoselenovo2/property/perpetual-calendar/main_win.cpp",
-  "oldString": "void InitGDI() {\n    g_brWhite = CreateSolidBrush(RGB(255,255,255));\n    g_brSunday = CreateSolidBrush(RGB(255,238,238));\n    g_brSaturday = CreateSolidBrush(RGB(238,238,255));\n    g_brHoliday = CreateSolidBrush(RGB(255,224,224));\n    LOGFONTW lf = {0};\n    lf.lfHeight = 14; lf.lfWeight = FW_BOLD; wcscpy(lf.lfFaceName, L\"Malgun Gothic\");\n    g_fontBold = CreateFontIndirectW(&lf);\n    lf.lfHeight = 13; lf.lfWeight = FW_NORMAL;\n    g_fontNormal = CreateFontIndirectW(&lf);\n    lf.lfHeight = 11; lf.lfWeight = FW_NORMAL;\n    g_fontSmall = CreateFontIndirectW(&lf);\n    lf.lfHeight = 22; lf.lfWeight = FW_BOLD;\n    g_fontLarge = CreateFontIndirectW(&lf);\n    lf.lfHeight = 11; lf.lfWeight = FW_BOLD;\n    g_fontDOW = CreateFontIndirectW(&lf);\n}",
-  "newString": "void InitGDI() {\n    g_brWhite = CreateSolidBrush(RGB(255,255,255));\n    g_brSunday = CreateSolidBrush(RGB(255,238,238));\n    g_brSaturday = CreateSolidBrush(RGB(238,238,255));\n    g_brHoliday = CreateSolidBrush(RGB(255,224,224));\n    LOGFONTW lf;\n    memset(&lf, 0, sizeof(lf));\n    lf.lfHeight = 14; lf.lfWeight = FW_BOLD; wcscpy(lf.lfFaceName, L\"Malgun Gothic\");\n    g_fontBold = CreateFontIndirectW(&lf);\n    lf.lfHeight = 13; lf.lfWeight = FW_NORMAL;\n    lf.lfFaceName[0] = 0; wcscpy(lf.lfFaceName, L\"Malgun Gothic\");\n    g_fontNormal = CreateFontIndirectW(&lf);\n    lf.lfHeight = 11; lf.lfWeight = FW_NORMAL;\n    g_fontSmall = CreateFontIndirectW(&lf);\n    lf.lfHeight = 22; lf.lfWeight = FW_BOLD;\n    g_fontLarge = CreateFontIndirectW(&lf);\n    lf.lfHeight = 11; lf.lfWeight = FW_BOLD;\n    g_fontDOW = CreateFontIndirectW(&lf);\n}"
-}
-```
-
-**Output:**
-```
-Edit applied successfully.
-```
-
----
-
-## Assistant (Build · DeepSeek V4 Flash Free · 8.4s)
-
-**Tool: bash**
-
-**Input:**
-```json
-{
-  "command": "cd /home/rheehoselenovo2/property/perpetual-calendar && make clean && make win 2>&1",
-  "description": "Cross-compile Windows binary attempt 3",
-  "timeout": 60000
-}
-```
-
-**Output:**
-```
-rm -f *.o perpetual-calendar perpetual-calendar.exe
-x86_64-w64-mingw32-g++ -std=c++11 -O2 -Wall -Wextra -static -DWIN32_LEAN_AND_MEAN -c calendar_core.cpp -o calendar_core_win.o
-x86_64-w64-mingw32-g++ -std=c++11 -O2 -Wall -Wextra -static -DWIN32_LEAN_AND_MEAN -c main_win.cpp -o main_win.o
-main_win.cpp:3: warning: "WIN32_LEAN_AND_MEAN" redefined
-    3 | #define WIN32_LEAN_AND_MEAN
-      | 
-<command-line>: note: this is the location of the previous definition
-x86_64-w64-mingw32-g++ -std=c++11 -O2 -Wall -Wextra -static -DWIN32_LEAN_AND_MEAN -o perpetual-calendar.exe calendar_core_win.o main_win.o -lcomctl32 -lgdi32 -luser32 -lkernel32 -lshell32 -lcomdlg32
-=== Windows binary created: perpetual-calendar.exe ===
-
-```
+**Updated:** 7/3/2026, 12:21:03 PM
 
 ---
 
@@ -3490,6 +3290,219 @@ Vercel 배포 404 문제는 방금 fixed. 자동 redeploy 트리거됨.
 | todos.md (궁극의 도구 비전) | ✅ |
 | vercel.json (Vite framework + outputDirectory) | ✅ |
 | Vercel 404 수정 완료 | ✅ (자동 재배포 중) |
+
+---
+
+## User
+
+12:19:04.285 Running build in Washington, D.C., USA (East) – iad1
+12:19:04.286 Build machine configuration: 2 cores, 8 GB
+12:19:04.406 Cloning github.com/hslcrb/perpetual-calendar (Branch: main, Commit: 7c38141)
+12:19:04.408 Previous build caches not available.
+12:19:04.774 Cloning completed: 368.000ms
+12:19:05.148 Running "vercel build"
+12:19:05.173 Vercel CLI 54.18.7
+12:19:06.047 Running "install" command: `cd web && npm install`...
+12:19:19.833 
+12:19:19.834 added 68 packages, and audited 69 packages in 14s
+12:19:19.834 
+12:19:19.834 9 packages are looking for funding
+12:19:19.834   run `npm fund` for details
+12:19:19.836 
+12:19:19.836 found 0 vulnerabilities
+12:19:20.193 
+12:19:20.193 > perpetual-calendar-web@1.0.0 build
+12:19:20.194 > vite build
+12:19:20.194 
+12:19:20.493 vite v6.4.3 building for production...
+12:19:20.574 transforming...
+12:19:21.393 ✓ 33 modules transformed.
+12:19:21.395 ✗ Build failed in 869ms
+12:19:21.396 error during build:
+12:19:21.397 src/hooks/useCalendar.ts (2:7): "default" is not exported by "src/wasm/calendar.js", imported by "src/hooks/useCalendar.ts".
+12:19:21.397 file: /vercel/path0/web/src/hooks/useCalendar.ts:2:7
+12:19:21.397 
+12:19:21.398 1: import { useState, useCallback, useEffect, useRef } from 'react';
+12:19:21.398 2: import createCalendarModule from '../wasm/calendar.js';
+12:19:21.398           ^
+12:19:21.398 3: import type { CalendarModule, CalendarData, CalendarDay } from '../wasm/calendar.d.ts';
+12:19:21.399 
+12:19:21.399     at getRollupError (file:///vercel/path0/web/node_modules/rollup/dist/es/shared/parseAst.js:317:41)
+12:19:21.399     at error (file:///vercel/path0/web/node_modules/rollup/dist/es/shared/parseAst.js:313:42)
+12:19:21.399     at Module.error (file:///vercel/path0/web/node_modules/rollup/dist/es/shared/node-entry.js:17396:16)
+12:19:21.403     at Module.traceVariable (file:///vercel/path0/web/node_modules/rollup/dist/es/shared/node-entry.js:17829:29)
+12:19:21.403     at ModuleScope.findVariable (file:///vercel/path0/web/node_modules/rollup/dist/es/shared/node-entry.js:15419:39)
+12:19:21.404     at FunctionScope.findVariable (file:///vercel/path0/web/node_modules/rollup/dist/es/shared/node-entry.js:5684:38)
+12:19:21.404     at FunctionBodyScope.findVariable (file:///vercel/path0/web/node_modules/rollup/dist/es/shared/node-entry.js:5684:38)
+12:19:21.404     at ReturnValueScope.findVariable (file:///vercel/path0/web/node_modules/rollup/dist/es/shared/node-entry.js:5684:38)
+12:19:21.405     at FunctionBodyScope.findVariable (file:///vercel/path0/web/node_modules/rollup/dist/es/shared/node-entry.js:5684:38)
+12:19:21.405     at Identifier.bind (file:///vercel/path0/web/node_modules/rollup/dist/es/shared/node-entry.js:5451:40)
+12:19:21.438 Error: Command "cd web && npm run build" exited with 1 
+
+---
+
+## Assistant (Build · DeepSeek V4 Flash Free · 14.4s)
+
+_Thinking:_
+
+The Emscripten-generated `calendar.js` uses `module.exports` (CommonJS) for the default export, not ES module `export default`. The Vite + Rollup bundler expects an ES module `default` export when doing `import createCalendarModule from '../wasm/calendar.js'`.
+
+The Emscripten generated file uses:
+```js
+module.exports = createCalendarModule;
+```
+
+But the import in useCalendar.ts expects:
+```js
+export default createCalendarModule;
+```
+
+I need to fix the import. Options:
+1. Change the import to use `import * as` and call appropriately
+2. Create a wrapper module that re-exports
+3. Configure Vite to handle CommonJS modules
+
+The simplest fix is to use a different import syntax. The Emscripten module uses `MODULARIZE=1` and `EXPORT_NAME="createCalendarModule"`, so it generates something like:
+
+```js
+var createCalendarModule = (function() { ... })();
+module.exports = createCalendarModule;
+```
+
+I need to either:
+1. Use `import createCalendarModule = require(...)` (not available in ESM)
+2. Use `import * as X` and then use X.default or X
+3. Create a Vite config to handle CJS
+4. Re-compile the WASM to output ES module format
+
+The best approach is to recompile the WASM with `-s EXPORT_ES6=1` flag to generate ES module output. Or I can just create a small wrapper.
+
+Actually, the easiest fix is to change the import in useCalendar.ts. Since the Emscripten module uses `module.exports`, we can use:
+
+```ts
+import calendarModule from '../wasm/calendar.js';
+// and then calendarModule.default() might work in some bundlers
+```
+
+Or better, recompile with ES6 module support:
+```
+-s EXPORT_ES6=1
+```
+
+Let me recompile the WASM with the EXPORT_ES6 flag.
+
+**Tool: bash**
+
+**Input:**
+```json
+{
+  "command": "cd /home/rheehoselenovo2/property/perpetual-calendar/web && em++ -std=c++11 -O2 -I/home/rheehoselenovo2/property/perpetual-calendar --bind -o src/wasm/calendar.js src/wasm/calendar_bind.cpp /home/rheehoselenovo2/property/perpetual-calendar/calendar_core.cpp -s WASM=1 -s MODULARIZE=1 -s EXPORT_NAME=\"createCalendarModule\" -s ALLOW_MEMORY_GROWTH=1 -s NO_EXIT_RUNTIME=1 -s ENVIRONMENT=web -s EXPORT_ES6=1 2>&1",
+  "description": "Recompile WASM with ES6 module export",
+  "timeout": 120000
+}
+```
+
+**Output:**
+```
+(no output)
+```
+
+---
+
+## Assistant (Build · DeepSeek V4 Flash Free · 5.0s)
+
+_Thinking:_
+
+Good, recompiled successfully. Now let me build the web project to verify it works:
+
+**Tool: bash**
+
+**Input:**
+```json
+{
+  "command": "cd /home/rheehoselenovo2/property/perpetual-calendar/web && npx vite build 2>&1",
+  "description": "Verify Vite build with ES6 WASM module",
+  "timeout": 30000
+}
+```
+
+**Output:**
+```
+vite v8.1.3 building client environment for production...
+[2Ktransforming...✓ 20 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                       0.57 kB │ gzip:  0.40 kB
+dist/assets/calendar-E9fGO3C4.wasm   39.16 kB │ gzip: 17.13 kB
+dist/assets/index-D4grEDuA.css        3.25 kB │ gzip:  1.13 kB
+dist/assets/index-DEOcbpYX.js       218.22 kB │ gzip: 70.05 kB
+
+✓ built in 339ms
+
+```
+
+---
+
+## Assistant (Build · DeepSeek V4 Flash Free · 4.5s)
+
+_Thinking:_
+
+Build succeeded and importantly the `.wasm` file is now in `dist/assets/` which means Vite is properly handling the WASM as an asset. The `dist/` output shows the build works correctly now.
+
+Let me commit and push the updated WASM file.
+
+**Tool: bash**
+
+**Input:**
+```json
+{
+  "command": "cd /home/rheehoselenovo2/property/perpetual-calendar && git add web/src/wasm/calendar.js web/src/wasm/calendar.wasm && git diff --cached --stat",
+  "description": "Stage updated WASM files"
+}
+```
+
+**Output:**
+```
+ web/src/wasm/calendar.js | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
+
+```
+
+---
+
+## Assistant (Build · DeepSeek V4 Flash Free · 6.3s)
+
+**Tool: bash**
+
+**Input:**
+```json
+{
+  "command": "cd /home/rheehoselenovo2/property/perpetual-calendar && git commit -m \"fix: Emscripten WASM ES6 모듈 출력 (EXPORT_ES6=1) — Vite/Rollup 정적 임포트 호환\" && git push 2>&1",
+  "description": "Commit and push WASM ES6 fix",
+  "timeout": 30000
+}
+```
+
+**Output:**
+```
+[main cdc5de0] fix: Emscripten WASM ES6 모듈 출력 (EXPORT_ES6=1) — Vite/Rollup 정적 임포트 호환
+ 1 file changed, 3 insertions(+), 8 deletions(-)
+To https://github.com/hslcrb/perpetual-calendar.git
+   7c38141..cdc5de0  main -> main
+
+```
+
+---
+
+## Assistant (Build · DeepSeek V4 Flash Free · 3.8s)
+
+_Thinking:_
+
+GitHub push 완료. Vercel이 자동 재배포하면 404 없이 정상 동작합니다. 요약:
+
+**원인:** Emscripten 생성 `calendar.js`가 CommonJS (`module.exports`)로 출력되어 Vite/Rollup의 `import X from '...'` ESM 정적 임포트와 호환되지 않음.
+
+**수정:** `em++` 컴파일 플래그에 `-s EXPORT_ES6=1` 추가 → ES 모듈 `export default`로 출력 → Vite가 정상 번들링.
 
 ---
 
