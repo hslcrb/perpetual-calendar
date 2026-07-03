@@ -2,380 +2,7 @@
 
 **Session ID:** ses_0da325e77ffetErts70QV0Pdvw
 **Created:** 7/3/2026, 11:27:41 AM
-**Updated:** 7/3/2026, 12:21:03 PM
-
----
-
-## Assistant (Build · DeepSeek V4 Flash Free · 3.8s)
-
-_Thinking:_
-
-Windows build succeeded. Let me check the binary sizes and build the Linux one too:
-
-**Tool: bash**
-
-**Input:**
-```json
-{
-  "command": "cd /home/rheehoselenovo2/property/perpetual-calendar && ls -lah perpetual-calendar perpetual-calendar.exe 2>/dev/null && file perpetual-calendar perpetual-calendar.exe 2>/dev/null",
-  "description": "Check binary sizes and types"
-}
-```
-
-**Output:**
-```
--rwxrwxr-x 1 rheehoselenovo2 rheehoselenovo2 963K  7월  3 11:43 perpetual-calendar.exe
-
-```
-
----
-
-## Assistant (Build · DeepSeek V4 Flash Free · 7.7s)
-
-_Thinking:_
-
-The Windows binary is 963KB (statically linked) but Linux binary wasn't rebuilt because I did `make clean && make win`. Let me rebuild the Linux binary too.
-
-**Tool: bash**
-
-**Input:**
-```json
-{
-  "command": "cd /home/rheehoselenovo2/property/perpetual-calendar && make linux 2>&1 && ls -lah perpetual-calendar perpetual-calendar.exe && file perpetual-calendar perpetual-calendar.exe",
-  "description": "Build Linux + check both binaries",
-  "timeout": 30000
-}
-```
-
-**Output:**
-```
-g++ -std=c++11 -O2 -Wall -Wextra -c calendar_core.cpp
-g++ -std=c++11 -O2 -Wall -Wextra -I/usr/include/gtk-3.0 -I/usr/include/pango-1.0 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/harfbuzz -I/usr/include/freetype2 -I/usr/include/libpng16 -I/usr/include/libmount -I/usr/include/blkid -I/usr/include/fribidi -I/usr/include/cairo -I/usr/include/pixman-1 -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/x86_64-linux-gnu -I/usr/include/webp -I/usr/include/gio-unix-2.0 -I/usr/include/atk-1.0 -I/usr/include/at-spi2-atk/2.0 -I/usr/include/at-spi-2.0 -I/usr/include/dbus-1.0 -I/usr/lib/x86_64-linux-gnu/dbus-1.0/include -pthread  -c main_gtk.cpp
-main_gtk.cpp: In function ‘GtkWidget* make_day_widget(const CalendarDay&)’:
-main_gtk.cpp:90:41: warning: ‘void gtk_widget_override_background_color(GtkWidget*, GtkStateFlags, const GdkRGBA*)’ is deprecated [-Wdeprecated-declarations]
-   90 |     gtk_widget_override_background_color(eb, GTK_STATE_FLAG_NORMAL, &bg);
-      |     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-In file included from /usr/include/gtk-3.0/gtk/gtkapplication.h:27,
-                 from /usr/include/gtk-3.0/gtk/gtkwindow.h:33,
-                 from /usr/include/gtk-3.0/gtk/gtkdialog.h:32,
-                 from /usr/include/gtk-3.0/gtk/gtkaboutdialog.h:30,
-                 from /usr/include/gtk-3.0/gtk/gtk.h:31,
-                 from main_gtk.cpp:2:
-/usr/include/gtk-3.0/gtk/gtkwidget.h:1148:14: note: declared here
- 1148 | void         gtk_widget_override_background_color (GtkWidget     *widget,
-      |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-main_gtk.cpp:111:30: warning: ‘void gtk_widget_override_color(GtkWidget*, GtkStateFlags, const GdkRGBA*)’ is deprecated [-Wdeprecated-declarations]
-  111 |     gtk_widget_override_color(dow, GTK_STATE_FLAG_NORMAL, &dc);
-      |     ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/usr/include/gtk-3.0/gtk/gtkwidget.h:1144:14: note: declared here
- 1144 | void         gtk_widget_override_color            (GtkWidget     *widget,
-      |              ^~~~~~~~~~~~~~~~~~~~~~~~~
-main_gtk.cpp:129:34: warning: ‘void gtk_widget_override_color(GtkWidget*, GtkStateFlags, const GdkRGBA*)’ is deprecated [-Wdeprecated-declarations]
-  129 |         gtk_widget_override_color(s, GTK_STATE_FLAG_NORMAL, &sc);
-      |         ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/usr/include/gtk-3.0/gtk/gtkwidget.h:1144:14: note: declared here
- 1144 | void         gtk_widget_override_color            (GtkWidget     *widget,
-      |              ^~~~~~~~~~~~~~~~~~~~~~~~~
-main_gtk.cpp: In function ‘void refresh_calendar()’:
-main_gtk.cpp:198:38: warning: ‘void gtk_widget_override_color(GtkWidget*, GtkStateFlags, const GdkRGBA*)’ is deprecated [-Wdeprecated-declarations]
-  198 |             gtk_widget_override_color(dl, GTK_STATE_FLAG_NORMAL, &dc2);
-      |             ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/usr/include/gtk-3.0/gtk/gtkwidget.h:1144:14: note: declared here
- 1144 | void         gtk_widget_override_color            (GtkWidget     *widget,
-      |              ^~~~~~~~~~~~~~~~~~~~~~~~~
-g++ -std=c++11 -O2 -Wall -Wextra -o perpetual-calendar calendar_core.o main_gtk.o -lgtk-3 -lgdk-3 -lz -lpangocairo-1.0 -lpango-1.0 -lharfbuzz -latk-1.0 -lcairo-gobject -lcairo -lgdk_pixbuf-2.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0 
--rwxrwxr-x 1 rheehoselenovo2 rheehoselenovo2  68K  7월  3 11:43 perpetual-calendar
--rwxrwxr-x 1 rheehoselenovo2 rheehoselenovo2 963K  7월  3 11:43 perpetual-calendar.exe
-perpetual-calendar:     ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=158578ebaa2737540f74aef0819def7b282cb93d, for GNU/Linux 3.2.0, not stripped
-perpetual-calendar.exe: PE32+ executable (console) x86-64 (stripped to external PDB), for MS Windows, 10 sections
-
-```
-
----
-
-## Assistant (Build · DeepSeek V4 Flash Free · 4.7s)
-
-_Thinking:_
-
-Both binaries built successfully:
-- Linux: 68KB ELF binary
-- Windows: 963KB PE32+ executable (statically linked = single binary)
-
-Let me update the todo list and also add a build script for convenience. Let me also create a cross-compile build script.
-
-**Tool: todowrite**
-
-**Input:**
-```json
-{
-  "todos": [
-    {
-      "priority": "high",
-      "content": "Analyze XLSM file 구조/매크로 분석",
-      "status": "completed"
-    },
-    {
-      "priority": "high",
-      "content": "C++ core calendar logic 구현 (calendar_core.h/cpp)",
-      "status": "completed"
-    },
-    {
-      "priority": "high",
-      "content": "Linux GTK3 GUI 구현 (main_gtk.cpp)",
-      "status": "completed"
-    },
-    {
-      "priority": "high",
-      "content": "Windows Win32 GUI 구현",
-      "status": "completed"
-    },
-    {
-      "priority": "high",
-      "content": "Makefile + 크로스컴파일 스크립트 작성",
-      "status": "completed"
-    },
-    {
-      "priority": "high",
-      "content": "Linux 네이티브 빌드 확인",
-      "status": "completed"
-    },
-    {
-      "priority": "high",
-      "content": "MinGW64 크로스컴파일 및 단일 바이너리",
-      "status": "completed"
-    }
-  ]
-}
-```
-
-**Output:**
-```
-[
-  {
-    "content": "Analyze XLSM file 구조/매크로 분석",
-    "status": "completed",
-    "priority": "high"
-  },
-  {
-    "content": "C++ core calendar logic 구현 (calendar_core.h/cpp)",
-    "status": "completed",
-    "priority": "high"
-  },
-  {
-    "content": "Linux GTK3 GUI 구현 (main_gtk.cpp)",
-    "status": "completed",
-    "priority": "high"
-  },
-  {
-    "content": "Windows Win32 GUI 구현",
-    "status": "completed",
-    "priority": "high"
-  },
-  {
-    "content": "Makefile + 크로스컴파일 스크립트 작성",
-    "status": "completed",
-    "priority": "high"
-  },
-  {
-    "content": "Linux 네이티브 빌드 확인",
-    "status": "completed",
-    "priority": "high"
-  },
-  {
-    "content": "MinGW64 크로스컴파일 및 단일 바이너리",
-    "status": "completed",
-    "priority": "high"
-  }
-]
-```
-
----
-
-## Assistant (Build · DeepSeek V4 Flash Free · 5.7s)
-
-_Thinking:_
-
-Let me now verify the Linux binary works by running it briefly:
-
-**Tool: bash**
-
-**Input:**
-```json
-{
-  "command": "cd /home/rheehoselenovo2/property/perpetual-calendar && timeout 2 ./perpetual-calendar 2>&1 || true",
-  "description": "Quick test Linux binary",
-  "timeout": 10000
-}
-```
-
-**Output:**
-```
-
-(perpetual-calendar:13624): Pango-WARNING **: 11:43:21.973: Invalid UTF-8 string passed to pango_layout_set_text()
-
-```
-
----
-
-## Assistant (Build · DeepSeek V4 Flash Free · 10.3s)
-
-_Thinking:_
-
-There's an invalid UTF-8 string issue with Pango. The problem is the Korean UTF-8 text encoding in the source code. The issue is that I'm using escaped UTF-8 byte sequences in the source code, but some of them might be wrong. Let me fix the encoding by using proper UTF-8 strings directly, since the file is saved as UTF-8.
-
-The issue is likely with the status bar text - let me check: the status bar says "일정은 날짜를 더블클릭하여 추가/수정할 수 있습니다." which in UTF-8 bytes might have an issue.
-
-Wait, I encoded it as `\xEC\x9D\xBC\xC0\xA4\xC0\xBA` but the correct UTF-8 for "일정은" is `\xEC\x9D\xBC\xEC\xA0\x95\xEC\x9D\x80`. I had a wrong byte in the text. Let me fix that.
-
-Actually, it's actually just the main_gtk.cpp status text. Let me check what text is problematic.
-
-Actually, looking more carefully at my status text in main_gtk.cpp:
-```
-"\xEC\x9D\xBC\xC0\xA4\xC0\xBA \xB3\xAF\xC2\xA7\xB8\xA6 \xB5\xB6\xBA\xC0\xC1\xB0\xC6\xAE\xC7\xCF\xBF\xEC \xC3\xDF\xB0\xA1/\xBC\xF6\xC1\xA4"
-```
-
-This looks like it might have been encoded with a different charset. Let me fix this by using proper Korean text in the source file directly. The file should be saved in UTF-8.
-
-Let me re-examine: "일정은" in UTF-8 is:
-- 일: EC 9D BC
-- 정: EC A0 95  
-- 은: EC 9D 80
-
-So the correct bytes are: \xEC\x9D\xBC\xEC\xA0\x95\xEC\x9D\x80
-
-But I have: \xEC\x9D\xBC\xC0\xA4\xC0\xBA
-
-That's wrong. Let me fix all the Korean strings properly.
-
-**Tool: edit**
-
-**Input:**
-```json
-{
-  "filePath": "/home/rheehoselenovo2/property/perpetual-calendar/main_gtk.cpp",
-  "oldString": "    GtkWidget* status = gtk_label_new(\"\\xEC\\x9D\\xBC\\xC0\\xA4\\xC0\\xBA \\xB3\\xAF\\xC2\\xA7\\xB8\\xA6 \\xB5\\xB6\\xBA\\xC0\\xC1\\xB0\\xC6\\xAE\\xC7\\xCF\\xBF\\xEC \\xC3\\xDF\\xB0\\xA1/\\xBC\\xF6\\xC1\\xA4\");",
-  "newString": "    GtkWidget* status = gtk_label_new(\"\\xEC\\x9D\\xBC\\xEC\\xA0\\x95\\xEC\\x9D\\x80 \\xB3\\xA0\\xEC\\xA7\\x9C\\xEB\\xA5\\xBC \\xB4\\xDC\\xBC\\xD8\\xC1\\xB0\\xC6\\xAE\\xC7\\xCF\\xBF\\xEC \\xC3\\xDF\\xB0\\xA1/\\xBC\\xF6\\xC1\\xA4\");"
-}
-```
-
-**Output:**
-```
-Edit applied successfully.
-```
-
----
-
-## Assistant (Build · DeepSeek V4 Flash Free · 5.0s)
-
-_Thinking:_
-
-Wait, I'm writing Korean in UTF-8 escape sequences, which is error-prone. Let me just use the actual Korean characters directly since the file is UTF-8:
-
-**Tool: edit**
-
-**Input:**
-```json
-{
-  "filePath": "/home/rheehoselenovo2/property/perpetual-calendar/main_gtk.cpp",
-  "oldString": "    GtkWidget* status = gtk_label_new(\"\\xEC\\x9D\\xBC\\xEC\\xA0\\x95\\xEC\\x9D\\x80 \\xB3\\xA0\\xEC\\xA7\\x9C\\xEB\\xA5\\xBC \\xB4\\xDC\\xBC\\xD8\\xC1\\xB0\\xC6\\xAE\\xC7\\xCF\\xBF\\xEC \\xC3\\xDF\\xB0\\xA1/\\xBC\\xF6\\xC1\\xA4\");",
-  "newString": "    GtkWidget* status = gtk_label_new(\"일정은 날짜를 더블클릭하여 추가/수정\");"
-}
-```
-
-**Output:**
-```
-Edit applied successfully.
-```
-
----
-
-## Assistant (Build · DeepSeek V4 Flash Free · 4.5s)
-
-_Thinking:_
-
-Now let me replace all the other escape sequences with actual Korean text too:
-
-**Tool: read**
-
-**Input:**
-```json
-{
-  "filePath": "/home/rheehoselenovo2/property/perpetual-calendar/main_gtk.cpp",
-  "limit": 10,
-  "offset": 29
-}
-```
-
-**Output:**
-```
-<path>/home/rheehoselenovo2/property/perpetual-calendar/main_gtk.cpp</path>
-<type>file</type>
-<content>
-29: 
-30: static void on_prev_clicked(GtkButton*, gpointer) {
-31:     g_app.move_prev_quarter();
-32:     refresh_calendar();
-33: }
-34: 
-35: static void on_next_clicked(GtkButton*, gpointer) {
-36:     g_app.move_next_quarter();
-37:     refresh_calendar();
-38: }
-
-(Showing lines 29-38 of 299. Use offset=39 to continue.)
-</content>
-```
-
----
-
-## Assistant (Build · DeepSeek V4 Flash Free · 26.8s)
-
-_Thinking:_
-
-Let me write the entire file with proper Korean text. It's messy to do incremental fixes. Let me rewrite the file with all proper UTF-8 Korean:
-
-**Tool: write**
-
-**Input:**
-```json
-{
-  "content": "#include \"calendar_core.h\"\n#include <gtk/gtk.h>\n#include <cstring>\n#include <string>\n#include <vector>\n#include <sstream>\n\nCalendarApp g_app;\n\nstatic GtkWidget* g_year_label = nullptr;\nstatic GtkWidget* g_month_grid = nullptr;\nstatic GtkWidget* g_scroll = nullptr;\nstatic GtkWidget* g_edit_dialog = nullptr;\nstatic GtkWidget* g_edit_entry = nullptr;\nstatic int g_edit_serial = 0;\n\nstatic void refresh_calendar();\n\nstatic std::string month_name_korean(int m) {\n    static const char* names[12] = {\"1월\",\"2월\",\"3월\",\"4월\",\"5월\",\"6월\",\n                                    \"7월\",\"8월\",\"9월\",\"10월\",\"11월\",\"12월\"};\n    return names[m-1];\n}\n\nstatic void on_prev_clicked(GtkButton*, gpointer) {\n    g_app.move_prev_quarter();\n    refresh_calendar();\n}\n\nstatic void on_next_clicked(GtkButton*, gpointer) {\n    g_app.move_next_quarter();\n    refresh_calendar();\n}\n\nstatic gboolean on_day_clicked(GtkWidget* w, GdkEventButton* ev, gpointer) {\n    if (ev->type == GDK_2BUTTON_PRESS) {\n        int* data = (int*)g_object_get_data(G_OBJECT(w), \"serial\");\n        if (data) {\n            g_edit_serial = *data;\n            std::string text = g_app.get_schedule(g_edit_serial);\n            if (g_edit_dialog) {\n                gtk_window_present(GTK_WINDOW(g_edit_dialog));\n            } else {\n                auto day = serial_to_date(g_edit_serial);\n                char title[128];\n                snprintf(title, sizeof(title), \"%d년 %d월 %d일 일정 수정\",\n                         day.tm_year+1900, day.tm_mon+1, day.tm_mday);\n                g_edit_dialog = gtk_dialog_new_with_buttons(title, NULL, GTK_DIALOG_MODAL,\n                    \"취소\", GTK_RESPONSE_REJECT,\n                    \"저장\", GTK_RESPONSE_ACCEPT, NULL);\n                gtk_window_set_default_size(GTK_WINDOW(g_edit_dialog), 400, 120);\n                gtk_window_set_position(GTK_WINDOW(g_edit_dialog), GTK_WIN_POS_CENTER);\n                GtkWidget* content = gtk_dialog_get_content_area(GTK_DIALOG(g_edit_dialog));\n                g_edit_entry = gtk_entry_new();\n                gtk_entry_set_text(GTK_ENTRY(g_edit_entry), text.c_str());\n                gtk_widget_set_hexpand(g_edit_entry, TRUE);\n                gtk_container_add(GTK_CONTAINER(content), g_edit_entry);\n                g_signal_connect(g_edit_dialog, \"response\", G_CALLBACK(+[](GtkDialog* dlg, gint resp, gpointer){\n                    if (resp == GTK_RESPONSE_ACCEPT) {\n                        const char* t = gtk_entry_get_text(GTK_ENTRY(g_edit_entry));\n                        g_app.set_schedule(g_edit_serial, t ? t : \"\");\n                        refresh_calendar();\n                    }\n                    gtk_widget_destroy(GTK_WIDGET(dlg));\n                    g_edit_dialog = nullptr;\n                    g_edit_entry = nullptr;\n                }), NULL);\n                g_signal_connect(g_edit_dialog, \"delete-event\", G_CALLBACK(gtk_true), NULL);\n                gtk_widget_show_all(g_edit_dialog);\n            }\n        }\n    }\n    return FALSE;\n}\n\nstatic GtkWidget* make_day_widget(const CalendarDay& day) {\n    GtkWidget* eb = gtk_event_box_new();\n    gtk_widget_set_size_request(eb, 170, 55);\n    \n    GdkRGBA bg;\n    if (day.is_holiday) gdk_rgba_parse(&bg, \"#FFE0E0\");\n    else if (day.dow == 0) gdk_rgba_parse(&bg, \"#FFEEEE\");\n    else if (day.dow == 6) gdk_rgba_parse(&bg, \"#EEEEFF\");\n    else gdk_rgba_parse(&bg, \"#FFFFFF\");\n    gtk_widget_override_background_color(eb, GTK_STATE_FLAG_NORMAL, &bg);\n    \n    GtkWidget* box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);\n    gtk_container_add(GTK_CONTAINER(eb), box);\n    gtk_widget_set_margin_start(box, 2);\n    \n    GtkWidget* top = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 3);\n    char buf[16]; snprintf(buf, sizeof(buf), \"%d\", day.day);\n    GtkWidget* dl = gtk_label_new(buf);\n    PangoAttrList* a = pango_attr_list_new();\n    pango_attr_list_insert(a, pango_attr_weight_new(PANGO_WEIGHT_BOLD));\n    gtk_label_set_attributes(GTK_LABEL(dl), a);\n    pango_attr_list_unref(a);\n    gtk_box_pack_start(GTK_BOX(top), dl, FALSE, FALSE, 0);\n    \n    GdkRGBA dc;\n    if (day.dow == 0) gdk_rgba_parse(&dc, \"#CC0000\");\n    else if (day.dow == 6) gdk_rgba_parse(&dc, \"#0000CC\");\n    else gdk_rgba_parse(&dc, \"#333333\");\n    GtkWidget* dow = gtk_label_new(day.dow_str.c_str());\n    gtk_widget_override_color(dow, GTK_STATE_FLAG_NORMAL, &dc);\n    gtk_box_pack_start(GTK_BOX(top), dow, FALSE, FALSE, 0);\n    gtk_box_pack_start(GTK_BOX(box), top, FALSE, FALSE, 0);\n    \n    std::string display;\n    if (day.is_holiday) display = day.holiday_name;\n    else if (!day.schedule.empty()) {\n        display = day.schedule;\n        if (display.size() > 14) display = display.substr(0, 14) + \"..\";\n    }\n    if (!display.empty()) {\n        GtkWidget* s = gtk_label_new(display.c_str());\n        gtk_label_set_xalign(GTK_LABEL(s), 0.0);\n        gtk_label_set_ellipsize(GTK_LABEL(s), PANGO_ELLIPSIZE_END);\n        GdkRGBA sc;\n        if (day.is_holiday) gdk_rgba_parse(&sc, \"#CC0000\");\n        else gdk_rgba_parse(&sc, \"#006600\");\n        gtk_widget_override_color(s, GTK_STATE_FLAG_NORMAL, &sc);\n        PangoAttrList* sa = pango_attr_list_new();\n        pango_attr_list_insert(sa, pango_attr_scale_new(PANGO_SCALE_SMALL));\n        gtk_label_set_attributes(GTK_LABEL(s), sa);\n        pango_attr_list_unref(sa);\n        gtk_box_pack_start(GTK_BOX(box), s, FALSE, FALSE, 0);\n    }\n    \n    int* sp = g_new(int, 1); *sp = day.serial;\n    g_object_set_data_full(G_OBJECT(eb), \"serial\", sp, g_free);\n    g_signal_connect(eb, \"button-press-event\", G_CALLBACK(on_day_clicked), NULL);\n    \n    char tip[256];\n    auto t = serial_to_date(day.serial);\n    snprintf(tip, sizeof(tip), \"%d년 %d월 %d일 (%s)\",\n             t.tm_year+1900, t.tm_mon+1, t.tm_mday, day.dow_str.c_str());\n    gtk_widget_set_tooltip_text(eb, tip);\n    \n    return eb;\n}\n\nstatic void refresh_calendar() {\n    if (g_month_grid) gtk_widget_destroy(g_month_grid);\n    \n    g_month_grid = gtk_grid_new();\n    gtk_grid_set_row_homogeneous(GTK_GRID(g_month_grid), TRUE);\n    gtk_grid_set_column_homogeneous(GTK_GRID(g_month_grid), TRUE);\n    gtk_grid_set_row_spacing(GTK_GRID(g_month_grid), 2);\n    gtk_grid_set_column_spacing(GTK_GRID(g_month_grid), 2);\n    \n    auto& data = g_app.get_calendar_data();\n    int year = g_app.get_year();\n    int start_month = g_app.get_start_month();\n    \n    char ys[64];\n    snprintf(ys, sizeof(ys), \"%d년 (%s)\", year,\n             start_month == 1 ? \"상반기\" : \"하반기\");\n    gtk_label_set_text(GTK_LABEL(g_year_label), ys);\n    \n    for (int mi = 0; mi < 6; mi++) {\n        int m = start_month + mi;\n        int y = year;\n        if (m > 12) { m -= 12; y++; }\n        \n        GtkWidget* frame = gtk_frame_new(NULL);\n        GtkWidget* vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);\n        gtk_container_add(GTK_CONTAINER(frame), vbox);\n        \n        char mh[32]; snprintf(mh, sizeof(mh), \"%d년 %s\", y, month_name_korean(m).c_str());\n        GtkWidget* ml = gtk_label_new(mh);\n        PangoAttrList* ba = pango_attr_list_new();\n        pango_attr_list_insert(ba, pango_attr_weight_new(PANGO_WEIGHT_BOLD));\n        pango_attr_list_insert(ba, pango_attr_size_new(13*PANGO_SCALE));\n        gtk_label_set_attributes(GTK_LABEL(ml), ba);\n        pango_attr_list_unref(ba);\n        gtk_label_set_xalign(GTK_LABEL(ml), 0.5);\n        gtk_box_pack_start(GTK_BOX(vbox), ml, FALSE, FALSE, 2);\n        \n        static const char* dows[7] = {\"일\",\"월\",\"화\",\"수\",\"목\",\"금\",\"토\"};\n        for (int di = 0; di < 7; di++) {\n            GtkWidget* dl = gtk_label_new(dows[di]);\n            gtk_label_set_xalign(GTK_LABEL(dl), 0.5);\n            GdkRGBA dc2;\n            if (di==0) gdk_rgba_parse(&dc2, \"#CC0000\");\n            else if (di==6) gdk_rgba_parse(&dc2, \"#0000CC\");\n            else gdk_rgba_parse(&dc2, \"#666666\");\n            gtk_widget_override_color(dl, GTK_STATE_FLAG_NORMAL, &dc2);\n            PangoAttrList* da = pango_attr_list_new();\n            pango_attr_list_insert(da, pango_attr_weight_new(PANGO_WEIGHT_BOLD));\n            pango_attr_list_insert(da, pango_attr_scale_new(PANGO_SCALE_SMALL));\n            gtk_label_set_attributes(GTK_LABEL(dl), da);\n            pango_attr_list_unref(da);\n            gtk_widget_set_size_request(dl, 24, 18);\n        }\n        \n        auto& days = data[mi];\n        if (days.empty()) continue;\n        int first_dow = days[0].dow;\n        \n        GtkWidget* dgrid = gtk_grid_new();\n        \n        for (size_t di = 0; di < days.size(); di++) {\n            int idx = first_dow + (int)di;\n            int row = idx / 7;\n            int col = idx % 7;\n            GtkWidget* dw = make_day_widget(days[di]);\n            gtk_grid_attach(GTK_GRID(dgrid), dw, col, row, 1, 1);\n        }\n        \n        gtk_box_pack_start(GTK_BOX(vbox), dgrid, TRUE, TRUE, 0);\n        \n        int grid_row = mi / 3;\n        int grid_col = mi % 3;\n        gtk_grid_attach(GTK_GRID(g_month_grid), frame, grid_col, grid_row, 1, 1);\n    }\n    \n    if (g_scroll) {\n        GtkWidget* child = gtk_bin_get_child(GTK_BIN(g_scroll));\n        if (child) gtk_widget_destroy(child);\n        gtk_container_add(GTK_CONTAINER(g_scroll), g_month_grid);\n        gtk_widget_show_all(g_scroll);\n    }\n}\n\nint main(int argc, char* argv[]) {\n    gtk_init(&argc, &argv);\n    g_app.load_schedule(\"schedule.csv\");\n    \n    GtkWidget* win = gtk_window_new(GTK_WINDOW_TOPLEVEL);\n    gtk_window_set_title(GTK_WINDOW(win), \"만년 달력 - Perpetual Calendar\");\n    gtk_window_set_default_size(GTK_WINDOW(win), 1350, 820);\n    gtk_window_set_position(GTK_WINDOW(win), GTK_WIN_POS_CENTER);\n    g_signal_connect(win, \"delete-event\", G_CALLBACK(gtk_main_quit), NULL);\n    \n    GtkWidget* vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);\n    gtk_container_add(GTK_CONTAINER(win), vbox);\n    \n    GtkWidget* tb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);\n    gtk_widget_set_margin_start(tb, 8); gtk_widget_set_margin_end(tb, 8);\n    gtk_widget_set_margin_top(tb, 6); gtk_widget_set_margin_bottom(tb, 6);\n    \n    GtkWidget* pbtn = gtk_button_new_with_label(\"◀ 이전 분기\");\n    g_signal_connect(pbtn, \"clicked\", G_CALLBACK(on_prev_clicked), NULL);\n    gtk_box_pack_start(GTK_BOX(tb), pbtn, FALSE, FALSE, 0);\n    \n    g_year_label = gtk_label_new(\"\");\n    PangoAttrList* ya = pango_attr_list_new();\n    pango_attr_list_insert(ya, pango_attr_weight_new(PANGO_WEIGHT_BOLD));\n    pango_attr_list_insert(ya, pango_attr_size_new(20*PANGO_SCALE));\n    gtk_label_set_attributes(GTK_LABEL(g_year_label), ya);\n    pango_attr_list_unref(ya);\n    gtk_box_pack_start(GTK_BOX(tb), g_year_label, TRUE, TRUE, 0);\n    \n    GtkWidget* nbtn = gtk_button_new_with_label(\"다음 분기 ▶\");\n    g_signal_connect(nbtn, \"clicked\", G_CALLBACK(on_next_clicked), NULL);\n    gtk_box_pack_start(GTK_BOX(tb), nbtn, FALSE, FALSE, 0);\n    \n    gtk_box_pack_start(GTK_BOX(vbox), tb, FALSE, FALSE, 0);\n    \n    g_scroll = gtk_scrolled_window_new(NULL, NULL);\n    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(g_scroll),\n                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);\n    gtk_box_pack_start(GTK_BOX(vbox), g_scroll, TRUE, TRUE, 0);\n    \n    GtkWidget* status = gtk_label_new(\"일정은 날짜를 더블클릭하여 추가/수정\");\n    gtk_widget_set_margin_start(status, 6); gtk_widget_set_margin_end(status, 6);\n    gtk_widget_set_margin_top(status, 2); gtk_widget_set_margin_bottom(status, 2);\n    gtk_label_set_xalign(GTK_LABEL(status), 0.0);\n    gtk_box_pack_start(GTK_BOX(vbox), status, FALSE, FALSE, 0);\n    \n    refresh_calendar();\n    gtk_widget_show_all(win);\n    gtk_main();\n    \n    g_app.save_schedule(\"schedule.csv\");\n    return 0;\n}\n",
-  "filePath": "/home/rheehoselenovo2/property/perpetual-calendar/main_gtk.cpp"
-}
-```
-
-**Output:**
-```
-Wrote file successfully.
-```
-
----
-
-## Assistant (Build · DeepSeek V4 Flash Free · 9.6s)
-
-_Thinking:_
-
-Now rebuild and test:
-
-**Tool: bash**
-
-**Input:**
-```json
-{
-  "command": "cd /home/rheehoselenovo2/property/perpetual-calendar && make clean && make linux 2>&1 | grep -E \"(error|warning:.*was not|^g\\+\\+|Built)\" && timeout 2 ./perpetual-calendar 2>&1 || true",
-  "description": "Rebuild Linux and quick test",
-  "timeout": 15000
-}
-```
-
-**Output:**
-```
-rm -f *.o perpetual-calendar perpetual-calendar.exe
-g++ -std=c++11 -O2 -Wall -Wextra -c calendar_core.cpp
-g++ -std=c++11 -O2 -Wall -Wextra -I/usr/include/gtk-3.0 -I/usr/include/pango-1.0 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/harfbuzz -I/usr/include/freetype2 -I/usr/include/libpng16 -I/usr/include/libmount -I/usr/include/blkid -I/usr/include/fribidi -I/usr/include/cairo -I/usr/include/pixman-1 -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/x86_64-linux-gnu -I/usr/include/webp -I/usr/include/gio-unix-2.0 -I/usr/include/atk-1.0 -I/usr/include/at-spi2-atk/2.0 -I/usr/include/at-spi-2.0 -I/usr/include/dbus-1.0 -I/usr/lib/x86_64-linux-gnu/dbus-1.0/include -pthread  -c main_gtk.cpp
-g++ -std=c++11 -O2 -Wall -Wextra -o perpetual-calendar calendar_core.o main_gtk.o -lgtk-3 -lgdk-3 -lz -lpangocairo-1.0 -lpango-1.0 -lharfbuzz -latk-1.0 -lcairo-gobject -lcairo -lgdk_pixbuf-2.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0 
-
-```
+**Updated:** 7/3/2026, 12:30:32 PM
 
 ---
 
@@ -3503,6 +3130,257 @@ GitHub push 완료. Vercel이 자동 재배포하면 404 없이 정상 동작합
 **원인:** Emscripten 생성 `calendar.js`가 CommonJS (`module.exports`)로 출력되어 Vite/Rollup의 `import X from '...'` ESM 정적 임포트와 호환되지 않음.
 
 **수정:** `em++` 컴파일 플래그에 `-s EXPORT_ES6=1` 추가 → ES 모듈 `export default`로 출력 → Vite가 정상 번들링.
+
+---
+
+## User
+
+그리고, 웹에 접속할때 무조건 항상 3초동안 아직 데모 상태입니다. (다음줄) 방문해주셔서 감사합니다.  라고 뜨게하라. 기본폰트. 딱 이렇게만. 그리고 3초 뒤 빠르게 페이드인되며 화면 다 보이게. 윗줄은 텍스트 #1f91df, 다음 아랫줄은 #0e1e52 컬러로. 기본 시스템 폰트.
+
+---
+
+## Assistant (Build · DeepSeek V4 Flash Free · 5.0s)
+
+_Thinking:_
+
+The user wants:
+1. On web load, show a splash/message screen for 3 seconds
+2. Text: "아직 데모 상태입니다." (first line, color #1f91df)
+3. Text: "방문해주셔서 감사합니다." (second line, color #0e1e52)
+4. After 3 seconds, fade in the actual calendar app
+5. Default system font
+
+I need to modify the React app to show a splash screen on initial load. Let me update App.tsx.
+
+**Tool: read**
+
+**Input:**
+```json
+{
+  "filePath": "/home/rheehoselenovo2/property/perpetual-calendar/web/src/App.tsx"
+}
+```
+
+**Output:**
+```
+<path>/home/rheehoselenovo2/property/perpetual-calendar/web/src/App.tsx</path>
+<type>file</type>
+<content>
+1: import React, { useState } from 'react';
+2: import MonthView from './components/MonthView';
+3: import { EditDialog } from './components/EditDialog';
+4: import { useCalendar } from './hooks/useCalendar';
+5: import './Calendar.css';
+6: 
+7: const App: React.FC = () => {
+8:   const cal = useCalendar();
+9:   const [editSerial, setEditSerial] = useState<number | null>(null);
+10:   const [loading, setLoading] = useState(true);
+11: 
+12:   // Store module reference for EditDialog date decoding
+13:   React.useEffect(() => {
+14:     if (cal.mod.current) {
+15:       (window as any).__calendarMod = cal.mod.current;
+16:       setLoading(false);
+17:     }
+18:   }, [cal.mod.current]);
+19: 
+20:   const yearLabel = cal.startMonth === 1
+21:     ? `${cal.year}년 (상반기)`
+22:     : `${cal.year}년 (하반기)`;
+23: 
+24:   // Calculate month display for each of 6 slots
+25:   const getMonthInfo = (idx: number) => {
+26:     let m = cal.startMonth + idx;
+27:     let y = cal.year;
+28:     if (m > 12) { m -= 12; y++; }
+29:     return { year: y, month: m };
+30:   };
+31: 
+32:   if (loading) {
+33:     return (
+34:       <div className="loading">
+35:         <div className="loading-text">달력 엔진 로딩 중...</div>
+36:         <div className="loading-bar"><div className="loading-fill" /></div>
+37:       </div>
+38:     );
+39:   }
+40: 
+41:   return (
+42:     <div className="app">
+43:       <div className="toolbar">
+44:         <button className="nav-btn" onClick={cal.movePrevQuarter}>
+45:           ◀ 이전 분기
+46:         </button>
+47:         <h2 className="year-label">{yearLabel}</h2>
+48:         <button className="nav-btn" onClick={cal.moveNextQuarter}>
+49:           다음 분기 ▶
+50:         </button>
+51:       </div>
+52:       <div className="calendar-grid">
+53:         {[0, 1, 2, 3, 4, 5].map((i) => {
+54:           const { year: y, month: m } = getMonthInfo(i);
+55:           return (
+56:             <MonthView
+57:               key={i}
+58:               year={y}
+59:               month={m}
+60:               days={cal.months[i]}
+61:               onDayDoubleClick={(serial) => setEditSerial(serial)}
+62:             />
+63:           );
+64:         })}
+65:       </div>
+66:       <div className="status-bar">
+67:         일정은 날짜를 더블클릭하여 추가/수정
+68:       </div>
+69: 
+70:       {editSerial !== null && (
+71:         <EditDialog
+72:           serial={editSerial}
+73:           currentText={cal.getSchedule(editSerial)}
+74:           onSave={(serial, text) => cal.setSchedule(serial, text)}
+75:           onClose={() => setEditSerial(null)}
+76:         />
+77:       )}
+78:     </div>
+79:   );
+80: };
+81: 
+82: export default App;
+
+(End of file - total 82 lines)
+</content>
+```
+
+---
+
+## Assistant (Build · DeepSeek V4 Flash Free · 8.8s)
+
+**Tool: write**
+
+**Input:**
+```json
+{
+  "filePath": "/home/rheehoselenovo2/property/perpetual-calendar/web/src/App.tsx",
+  "content": "import React, { useState } from 'react';\nimport MonthView from './components/MonthView';\nimport { EditDialog } from './components/EditDialog';\nimport { useCalendar } from './hooks/useCalendar';\nimport './Calendar.css';\n\nconst SPLASH_DURATION = 3000;\nconst FADE_DURATION = 500;\n\nconst App: React.FC = () => {\n  const cal = useCalendar();\n  const [editSerial, setEditSerial] = useState<number | null>(null);\n  const [wasmReady, setWasmReady] = useState(false);\n  const [splashDone, setSplashDone] = useState(false);\n  const [fadeIn, setFadeIn] = useState(false);\n\n  React.useEffect(() => {\n    if (cal.mod.current) {\n      (window as any).__calendarMod = cal.mod.current;\n      setWasmReady(true);\n    }\n  }, [cal.mod.current]);\n\n  React.useEffect(() => {\n    if (wasmReady) {\n      const splashTimer = setTimeout(() => setSplashDone(true), SPLASH_DURATION);\n      return () => clearTimeout(splashTimer);\n    }\n  }, [wasmReady]);\n\n  React.useEffect(() => {\n    if (splashDone) {\n      const fadeTimer = setTimeout(() => setFadeIn(true), 50);\n      return () => clearTimeout(fadeTimer);\n    }\n  }, [splashDone]);\n\n  if (!splashDone) {\n    return (\n      <div style={{\n        position: 'fixed', inset: 0,\n        display: 'flex', flexDirection: 'column',\n        alignItems: 'center', justifyContent: 'center',\n        background: '#fff', zIndex: 9999,\n        fontFamily: 'system-ui, -apple-system, sans-serif',\n      }}>\n        <div style={{\n          fontSize: 24, color: '#1f91df',\n          marginBottom: 12, fontWeight: 400,\n        }}>\n          아직 데모 상태입니다.\n        </div>\n        <div style={{\n          fontSize: 16, color: '#0e1e52',\n          fontWeight: 400,\n        }}>\n          방문해주셔서 감사합니다.\n        </div>\n      </div>\n    );\n  }\n\n  return (\n    <div className=\"app\" style={{\n      opacity: fadeIn ? 1 : 0,\n      transition: `opacity ${FADE_DURATION}ms ease-in-out`,\n    }}>\n      <div className=\"toolbar\">\n        <button className=\"nav-btn\" onClick={cal.movePrevQuarter}>\n          ◀ 이전 분기\n        </button>\n        <h2 className=\"year-label\">\n          {cal.startMonth === 1 ? `${cal.year}년 (상반기)` : `${cal.year}년 (하반기)`}\n        </h2>\n        <button className=\"nav-btn\" onClick={cal.moveNextQuarter}>\n          다음 분기 ▶\n        </button>\n      </div>\n      <div className=\"calendar-grid\">\n        {[0, 1, 2, 3, 4, 5].map((i) => {\n          let m = cal.startMonth + i;\n          let y = cal.year;\n          if (m > 12) { m -= 12; y++; }\n          return (\n            <MonthView\n              key={i}\n              year={y}\n              month={m}\n              days={cal.months[i]}\n              onDayDoubleClick={(serial) => setEditSerial(serial)}\n            />\n          );\n        })}\n      </div>\n      <div className=\"status-bar\">\n        일정은 날짜를 더블클릭하여 추가/수정\n      </div>\n\n      {editSerial !== null && (\n        <EditDialog\n          serial={editSerial}\n          currentText={cal.getSchedule(editSerial)}\n          onSave={(serial, text) => cal.setSchedule(serial, text)}\n          onClose={() => setEditSerial(null)}\n        />\n      )}\n    </div>\n  );\n};\n\nexport default App;\n"
+}
+```
+
+**Output:**
+```
+Wrote file successfully.
+```
+
+---
+
+## Assistant (Build · DeepSeek V4 Flash Free · 5.9s)
+
+_Thinking:_
+
+Now commit and push:
+
+**Tool: bash**
+
+**Input:**
+```json
+{
+  "command": "cd /home/rheehoselenovo2/property/perpetual-calendar && git add web/src/App.tsx && git commit -m \"feat: 스플래시 화면 — 3초 '아직 데모 상태입니다.' 후 페이드인\" && git push 2>&1",
+  "description": "Commit splash screen and push",
+  "timeout": 30000
+}
+```
+
+**Output:**
+```
+[main 01af6a0] feat: 스플래시 화면 — 3초 '아직 데모 상태입니다.' 후 페이드인
+ 1 file changed, 49 insertions(+), 20 deletions(-)
+To https://github.com/hslcrb/perpetual-calendar.git
+   db04b84..01af6a0  main -> main
+
+```
+
+---
+
+## Assistant (Build · DeepSeek V4 Flash Free · 3.8s)
+
+푸시 완료. Vercel이 자동 재배포하면 아래처럼 동작합니다.
+
+```text
+┌─────────────────────────────────────┐
+│                                     │
+│        아직 데모 상태입니다.          │  ← #1f91df, 24px
+│                                     │
+│       방문해주셔서 감사합니다.        │  ← #0e1e52, 16px
+│                                     │
+└─────────────────────────────────────┘
+        3초 후 페이드인 (500ms)
+
+       ┌─── 실제 달력 화면 ───┐
+       │                     │
+```
+
+---
+
+## User
+
+아직 -> 현재로 바꿔라. 어휘 선택.
+
+---
+
+## Assistant (Build · DeepSeek V4 Flash Free · 4.4s)
+
+_Thinking:_
+
+The user wants to change "아직 데모 상태입니다" to "현재 데모 상태입니다". Just one word change.
+
+**Tool: edit**
+
+**Input:**
+```json
+{
+  "filePath": "/home/rheehoselenovo2/property/perpetual-calendar/web/src/App.tsx",
+  "oldString": "아직 데모 상태입니다.",
+  "newString": "현재 데모 상태입니다."
+}
+```
+
+**Output:**
+```
+Edit applied successfully.
+```
+
+---
+
+## Assistant (Build · DeepSeek V4 Flash Free · 11.2s)
+
+**Tool: bash**
+
+**Input:**
+```json
+{
+  "command": "cd /home/rheehoselenovo2/property/perpetual-calendar && git add web/src/App.tsx && git commit -m \"fix: 어휘 선택 — '아직' -> '현재' 데모 상태입니다\" && git push 2>&1",
+  "description": "Commit word fix and push",
+  "timeout": 30000
+}
+```
+
+**Output:**
+```
+[main d0f5209] fix: 어휘 선택 — '아직' -> '현재' 데모 상태입니다
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+To https://github.com/hslcrb/perpetual-calendar.git
+   01af6a0..d0f5209  main -> main
+
+```
+
+---
+
+## Assistant (Build · DeepSeek V4 Flash Free · 3.6s)
+
+_Thinking:_
+
+Done. 바꿨습니다: `아직` → `현재`
 
 ---
 
