@@ -48,7 +48,7 @@ const App: React.FC = () => {
           fontSize: 24, color: '#1f91df',
           marginBottom: 12, fontWeight: 400,
         }}>
-          아직 데모 상태입니다.
+          현재 데모 상태입니다.
         </div>
         <div style={{
           fontSize: 16, color: '#0e1e52',
