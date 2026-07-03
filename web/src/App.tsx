@@ -4,54 +4,83 @@ import { EditDialog } from './components/EditDialog';
 import { useCalendar } from './hooks/useCalendar';
 import './Calendar.css';
 
+const SPLASH_DURATION = 3000;
+const FADE_DURATION = 500;
+
 const App: React.FC = () => {
   const cal = useCalendar();
   const [editSerial, setEditSerial] = useState<number | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [wasmReady, setWasmReady] = useState(false);
+  const [splashDone, setSplashDone] = useState(false);
+  const [fadeIn, setFadeIn] = useState(false);
 
-  // Store module reference for EditDialog date decoding
   React.useEffect(() => {
     if (cal.mod.current) {
       (window as any).__calendarMod = cal.mod.current;
-      setLoading(false);
+      setWasmReady(true);
     }
   }, [cal.mod.current]);
 
-  const yearLabel = cal.startMonth === 1
-    ? `${cal.year}년 (상반기)`
-    : `${cal.year}년 (하반기)`;
+  React.useEffect(() => {
+    if (wasmReady) {
+      const splashTimer = setTimeout(() => setSplashDone(true), SPLASH_DURATION);
+      return () => clearTimeout(splashTimer);
+    }
+  }, [wasmReady]);
 
-  // Calculate month display for each of 6 slots
-  const getMonthInfo = (idx: number) => {
-    let m = cal.startMonth + idx;
-    let y = cal.year;
-    if (m > 12) { m -= 12; y++; }
-    return { year: y, month: m };
-  };
+  React.useEffect(() => {
+    if (splashDone) {
+      const fadeTimer = setTimeout(() => setFadeIn(true), 50);
+      return () => clearTimeout(fadeTimer);
+    }
+  }, [splashDone]);
 
-  if (loading) {
+  if (!splashDone) {
     return (
-      <div className="loading">
-        <div className="loading-text">달력 엔진 로딩 중...</div>
-        <div className="loading-bar"><div className="loading-fill" /></div>
+      <div style={{
+        position: 'fixed', inset: 0,
+        display: 'flex', flexDirection: 'column',
+        alignItems: 'center', justifyContent: 'center',
+        background: '#fff', zIndex: 9999,
+        fontFamily: 'system-ui, -apple-system, sans-serif',
+      }}>
+        <div style={{
+          fontSize: 24, color: '#1f91df',
+          marginBottom: 12, fontWeight: 400,
+        }}>
+          아직 데모 상태입니다.
+        </div>
+        <div style={{
+          fontSize: 16, color: '#0e1e52',
+          fontWeight: 400,
+        }}>
+          방문해주셔서 감사합니다.
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="app">
+    <div className="app" style={{
+      opacity: fadeIn ? 1 : 0,
+      transition: `opacity ${FADE_DURATION}ms ease-in-out`,
+    }}>
       <div className="toolbar">
         <button className="nav-btn" onClick={cal.movePrevQuarter}>
           ◀ 이전 분기
         </button>
-        <h2 className="year-label">{yearLabel}</h2>
+        <h2 className="year-label">
+          {cal.startMonth === 1 ? `${cal.year}년 (상반기)` : `${cal.year}년 (하반기)`}
+        </h2>
         <button className="nav-btn" onClick={cal.moveNextQuarter}>
           다음 분기 ▶
         </button>
       </div>
       <div className="calendar-grid">
         {[0, 1, 2, 3, 4, 5].map((i) => {
-          const { year: y, month: m } = getMonthInfo(i);
+          let m = cal.startMonth + i;
+          let y = cal.year;
+          if (m > 12) { m -= 12; y++; }
           return (
             <MonthView
               key={i}
