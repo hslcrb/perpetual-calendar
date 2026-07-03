@@ -1,0 +1,4 @@
+*.o
+perpetual-calendar
+perpetual-calendar.exe
+schedule.csv
